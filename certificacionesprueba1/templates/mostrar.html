@@ -1,0 +1,56 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <title>Title</title>  
+      {# Cargamos la librería #}
+	  {% load bootstrap4 %}
+ 
+	  {# CSS Bootstrap #}
+	  {% bootstrap_css %}
+     
+</head>  
+<body>
+    
+
+
+    <h1>Lista de categorias</h1>
+    <table class="table table-dark" border="1" width="600">
+    <tr>
+    <td>Decreto</td>
+    <td>Categoria</td>
+    <td>Fecha Vigencia</td>
+    <td>Empresa</td>
+    <td>Descripción</td>
+    <td>Observaciones</td>
+    <td>Importe</td>
+    <td>Jerarquia Relacionada</td>
+    <td>Escala Nro</td>
+    </tr>
+    {% for sts in st %}
+    <tr>
+    <td>{{ sts.decreto }}</td>
+    <td>
+    {{ sts.categoria }}</td>
+    <td> {{ sts.fecha_vig }}
+    </td>
+    <td> {{ sts.empresa }}
+    </td>
+    <td> {{ sts.descripcion }}
+    </td>
+    <td> {{ sts.observaciones}}
+    </td>
+    <td> {{ sts.importe1 }}
+    </td>
+    <td> {{ sts.jerarquia_relacionada }}
+    </td>
+    <td> {{ sts.escalanro }}
+    </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+      {# JS y jQuery Bootstrap #}
+	  {% bootstrap_javascript jquery='full' %}
+    </body>
+    </html>  
