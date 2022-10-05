@@ -3,7 +3,7 @@
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
@@ -16,22 +16,22 @@ class Agrupamientos(models.Model):
     idd = models.AutoField(db_column='Idd', primary_key=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Agrupamientos'
 
 
 class CertifCeroDias(models.Model):
-    legajo = models.DecimalField(primary_key=True, db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Certif Cero Dias'
 
 
 class Certificaciones(models.Model):
-    documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    documento = models.DecimalField(db_column='Documento', primary_key=True, max_digits=18, decimal_places=0)  # Field name made lowercase.
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
-    planilla = models.AutoField(db_column='Planilla', primary_key=True)  # Field name made lowercase.
+    planilla = models.AutoField(db_column='Planilla')  # Field name made lowercase.
     empresa = models.ForeignKey('Empresas', models.DO_NOTHING, db_column='Empresa', blank=True, null=True)  # Field name made lowercase.
     usuario = models.CharField(db_column='Usuario', max_length=50, blank=True, null=True)  # Field name made lowercase.
     fecha_pedido = models.DateTimeField(db_column='Fecha Pedido', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -62,13 +62,13 @@ class Certificaciones(models.Model):
     jefecertificante = models.CharField(db_column='JefeCertificante', max_length=50, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Certificaciones'
         unique_together = (('documento', 'legajo', 'planilla'),)
 
 
 class CertificacionesAusenciasjustif(models.Model):
-    documento = models.FloatField( primary_key=True, db_column='Documento')  # Field name made lowercase.
+    documento = models.FloatField(db_column='Documento', blank=True, null=True)  # Field name made lowercase.
     legajo = models.FloatField(db_column='Legajo', blank=True, null=True)  # Field name made lowercase.
     empresa = models.CharField(db_column='Empresa', max_length=255, blank=True, null=True)  # Field name made lowercase.
     cat_revista = models.FloatField(db_column='Cat revista', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -88,7 +88,7 @@ class CertificacionesAusenciasjustif(models.Model):
     comentario = models.CharField(db_column='Comentario', max_length=255, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Certificaciones AusenciasJustif'
 
 
@@ -98,7 +98,7 @@ class CertificacionesCausas(models.Model):
     abreviatura = models.CharField(db_column='Abreviatura', max_length=8)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Certificaciones Causas'
 
 
@@ -110,12 +110,11 @@ class CertificacionesEstados(models.Model):
     idd = models.AutoField(db_column='Idd', primary_key=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Certificaciones Estados'
 
 
 class CertificacionesJubordinaria(models.Model):
-    idd = models.AutoField(db_column='Idd', primary_key=True)
     anio = models.IntegerField(db_column='Anio')  # Field name made lowercase.
     edadmujer = models.IntegerField(db_column='EdadMujer')  # Field name made lowercase.
     edadhombre = models.IntegerField(db_column='EdadHombre')  # Field name made lowercase.
@@ -123,7 +122,7 @@ class CertificacionesJubordinaria(models.Model):
     anioshombre = models.IntegerField(db_column='AniosHombre')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Certificaciones JubOrdinaria'
 
 
@@ -136,7 +135,7 @@ class CertificacionesObservaciones(models.Model):
     dependencia = models.CharField(db_column='Dependencia', max_length=2, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Certificaciones Observaciones'
         unique_together = (('idd', 'planilla'),)
 
@@ -155,16 +154,16 @@ class CertificacionesPedidos(models.Model):
     movim = models.CharField(db_column='Movim', max_length=1, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Certificaciones Pedidos'
 
 
 class CertificacionesRemuneracion(models.Model):
-    documento = models.DecimalField(db_column='Documento',  max_digits=18, decimal_places=0)  # Field name made lowercase.
+    documento = models.DecimalField(db_column='Documento', primary_key=True, max_digits=18, decimal_places=0)  # Field name made lowercase.
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
     planilla = models.DecimalField(db_column='Planilla', max_digits=18, decimal_places=0)  # Field name made lowercase.
-    renglon = models.AutoField(db_column='Renglon', primary_key=True)  # Field name made lowercase.
-    anio = models.DecimalField(db_column='Anio', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    renglon = models.AutoField(db_column='Renglon')  # Field name made lowercase.
+    año = models.DecimalField(db_column='Año', max_digits=18, decimal_places=0)  # Field name made lowercase.
     con_aporte = models.DecimalField(db_column='Con Aporte', max_digits=18, decimal_places=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     total = models.DecimalField(db_column='Total', max_digits=18, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
     sac = models.DecimalField(db_column='SAC', max_digits=18, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
@@ -172,16 +171,16 @@ class CertificacionesRemuneracion(models.Model):
     observaciones = models.CharField(db_column='Observaciones', max_length=300, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Certificaciones Remuneracion'
         unique_together = (('documento', 'legajo', 'planilla', 'renglon'),)
 
 
 class CertificacionesServicios(models.Model):
-    documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    documento = models.DecimalField(db_column='Documento', primary_key=True, max_digits=18, decimal_places=0)  # Field name made lowercase.
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
     planilla = models.DecimalField(db_column='Planilla', max_digits=18, decimal_places=0)  # Field name made lowercase.
-    renglon = models.AutoField(db_column='Renglon', primary_key=True)  # Field name made lowercase.
+    renglon = models.AutoField(db_column='Renglon')  # Field name made lowercase.
     caracter = models.CharField(db_column='Caracter', max_length=2)  # Field name made lowercase.
     cargo = models.ForeignKey('Categorias', models.DO_NOTHING, db_column='Cargo', blank=True, null=True)  # Field name made lowercase.
     fecha_desde = models.DateTimeField(db_column='Fecha Desde')  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -194,13 +193,13 @@ class CertificacionesServicios(models.Model):
     dias = models.DecimalField(db_column='Dias', max_digits=18, decimal_places=0)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Certificaciones Servicios'
         unique_together = (('documento', 'legajo', 'planilla', 'renglon'),)
 
 
 class Certificacionesht(models.Model):
-    idd = models.AutoField(db_column='IDD',primary_key=True)  # Field name made lowercase.
+    idd = models.AutoField(db_column='IDD')  # Field name made lowercase.
     planilla = models.DecimalField(db_column='Planilla', max_digits=18, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
     documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
@@ -213,12 +212,12 @@ class Certificacionesht(models.Model):
     prescripcion = models.IntegerField(db_column='Prescripcion', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'CertificacionesHT'
 
 
 class Conceptos(models.Model):
-    idd_concepto = models.DecimalField(db_column='idd_Concepto', max_digits=18, decimal_places=0,primary_key=True)  # Field name made lowercase.
+    idd_concepto = models.DecimalField(db_column='idd_Concepto', max_digits=18, decimal_places=0)  # Field name made lowercase.
     empresa = models.CharField(db_column='Empresa', max_length=6)  # Field name made lowercase.
     concepto = models.CharField(db_column='Concepto', max_length=3)  # Field name made lowercase.
     descripcion = models.CharField(db_column='Descripcion', max_length=30)  # Field name made lowercase.
@@ -226,7 +225,7 @@ class Conceptos(models.Model):
     novedades = models.CharField(db_column='Novedades', max_length=1, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Conceptos'
 
 
@@ -244,7 +243,7 @@ class Dependencias(models.Model):
     depsiga = models.IntegerField(db_column='DepSiga', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Dependencias'
 
 
@@ -272,7 +271,7 @@ class DescuentosSalarioFamiliar(models.Model):
     empajuste = models.CharField(db_column='EmpAjuste', max_length=6, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Descuentos Salario Familiar'
         unique_together = (('nroorden', 'documento', 'legajo', 'empresa', 'concepto'),)
 
@@ -304,7 +303,7 @@ class Empresas(models.Model):
     recibo_leyenda = models.CharField(db_column='Recibo_Leyenda', max_length=20, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Empresas'
 
 
@@ -331,7 +330,7 @@ class Legajos(models.Model):
     situacion = models.CharField(db_column='Situacion', max_length=1, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Legajos'
         unique_together = (('documento', 'idd_legajos'),)
 
@@ -354,13 +353,13 @@ class Liquidacion(models.Model):
     t3numeric = models.DecimalField(db_column='T3numeric', max_digits=18, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Liquidacion'
         unique_together = (('documento', 'idd_legajos', 'idd_concepto', 'orden'),)
 
 
 class Maestro(models.Model):
-    documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    documento = models.DecimalField(db_column='Documento', primary_key=True, max_digits=18, decimal_places=0)  # Field name made lowercase.
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
     fecha_proceso = models.DateTimeField(db_column='Fecha Proceso')  # Field name made lowercase. Field renamed to remove unsuitable characters.
     empresa = models.CharField(db_column='Empresa', max_length=6)  # Field name made lowercase.
@@ -397,17 +396,16 @@ class Maestro(models.Model):
     motivo_baja = models.CharField(db_column='Motivo Baja', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     derecho_ocupacion = models.DecimalField(db_column='Derecho Ocupacion', max_digits=18, decimal_places=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     art = models.IntegerField(db_column='ART', blank=True, null=True)  # Field name made lowercase.
-    idmaestro = models.AutoField(db_column='IDMaestro', primary_key=True)  # Field name made lowercase.
+    idmaestro = models.AutoField(db_column='IDMaestro')  # Field name made lowercase.
     origen = models.CharField(max_length=10, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Maestro'
         unique_together = (('documento', 'legajo', 'fecha_proceso', 'empresa'),)
 
 
 class Parametros(models.Model):
-    idd = models.AutoField(db_column='Idd', primary_key=True)
     registro = models.DecimalField(db_column='Registro', max_digits=18, decimal_places=0)  # Field name made lowercase.
     razon_social = models.CharField(db_column='Razon_social', max_length=200)  # Field name made lowercase.
     fecha_contrato = models.DateTimeField(db_column='Fecha_contrato', blank=True, null=True)  # Field name made lowercase.
@@ -457,13 +455,13 @@ class Parametros(models.Model):
     tope_maximo_art = models.DecimalField(db_column='Tope_maximo_art', max_digits=18, decimal_places=2)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Parametros'
 
 
 class Personas(models.Model):
-    id = models.AutoField(primary_key=True)
-    documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    id = models.AutoField()
+    documento = models.DecimalField(db_column='Documento', primary_key=True, max_digits=18, decimal_places=0)  # Field name made lowercase.
     apellido = models.CharField(db_column='Apellido', max_length=80)  # Field name made lowercase.
     apellidosolo = models.CharField(db_column='apellidoSolo', max_length=40)  # Field name made lowercase.
     nombre = models.CharField(max_length=40)
@@ -493,22 +491,21 @@ class Personas(models.Model):
     origen = models.CharField(max_length=6)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Personas'
 
 
 class ReemplazoAplicativos(models.Model):
-    id = models.AutoField(db_column='Id', primary_key=True)
+    id = models.AutoField()
     aplicacion = models.CharField(max_length=50)
     killer = models.IntegerField()
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Reemplazo_aplicativos'
 
 
 class RptCtrolcertgiradas(models.Model):
-    idd = models.AutoField(db_column='Idd', primary_key=True)
     orden = models.CharField(max_length=1)
     leyenda = models.CharField(max_length=88)
     documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
@@ -527,9 +524,25 @@ class RptCtrolcertgiradas(models.Model):
     valorizacion = models.IntegerField()
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Rpt_CtrolCertGiradas'
 
+
+class TempPlanillaaportesolidario(models.Model):
+    documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    apellido = models.CharField(max_length=40)
+    empresa = models.CharField(db_column='Empresa', max_length=6)  # Field name made lowercase.
+    concepto1 = models.DecimalField(db_column='Concepto1', max_digits=18, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
+    descripcion = models.CharField(db_column='Descripcion', max_length=60)  # Field name made lowercase.
+    importe = models.DecimalField(db_column='Importe', max_digits=38, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    año = models.IntegerField(blank=True, null=True)
+    fecha_desde = models.CharField(db_column='Fecha Desde', max_length=10)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    fecha_hasta = models.CharField(db_column='Fecha Hasta', max_length=10)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+
+    class Meta:
+        managed = False
+        db_table = 'Temp_PlanillaAporteSolidario'
 
 
 class Tmpcpt(models.Model):
@@ -556,15 +569,15 @@ class Tmpcpt(models.Model):
     cajacoeficiente = models.IntegerField(db_column='CajaCoeficiente', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Tmpcpt'
         unique_together = (('empresa', 'concepto'),)
 
 
 class TomasCesesAdm(models.Model):
-    documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    documento = models.DecimalField(db_column='Documento', primary_key=True, max_digits=18, decimal_places=0)  # Field name made lowercase.
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
-    idd_tomas = models.AutoField(db_column='Idd_Tomas', primary_key=True)  # Field name made lowercase.
+    idd_tomas = models.AutoField(db_column='Idd_Tomas')  # Field name made lowercase.
     fecha_desde = models.DateTimeField(db_column='Fecha Desde')  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fecha_hasta = models.CharField(db_column='Fecha hasta', max_length=10, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     dependencia = models.CharField(db_column='Dependencia', max_length=3)  # Field name made lowercase.
@@ -588,13 +601,13 @@ class TomasCesesAdm(models.Model):
     tca_fecha = models.DateTimeField(db_column='TCA_Fecha', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Tomas_Ceses_Adm'
         unique_together = (('documento', 'legajo', 'idd_tomas'),)
 
 
 class UserHome(models.Model):
-    idd = models.AutoField(db_column='IDD', primary_key=True)  # Field name made lowercase.
+    idd = models.AutoField(db_column='IDD')  # Field name made lowercase.
     usuario = models.CharField(db_column='Usuario', max_length=50, blank=True, null=True)  # Field name made lowercase.
     home = models.CharField(db_column='Home', max_length=200, blank=True, null=True)  # Field name made lowercase.
     sector = models.CharField(db_column='Sector', max_length=15, blank=True, null=True)  # Field name made lowercase.
@@ -608,7 +621,7 @@ class UserHome(models.Model):
     home_password = models.CharField(max_length=80, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'User Home'
 
 
@@ -632,15 +645,14 @@ class Valorizaciones(models.Model):
     novedad_negativa = models.CharField(max_length=2500)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'Valorizaciones'
 
 
 class Categorias(models.Model):
-    idd = models.AutoField(db_column='Idd', primary_key=True)
     decreto = models.CharField(db_column='Decreto', max_length=30)  # Field name made lowercase.
     fecha_vig = models.DateTimeField(db_column='Fecha Vig')  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    categoria = models.CharField(db_column='Categoria', max_length=3)  # Field name made lowercase.
+    categoria = models.CharField(db_column='Categoria', primary_key=True, max_length=3)  # Field name made lowercase.
     empresa = models.CharField(db_column='Empresa', max_length=6)  # Field name made lowercase.
     descripcion = models.CharField(db_column='Descripcion', max_length=50, blank=True, null=True)  # Field name made lowercase.
     observaciones = models.CharField(db_column='Observaciones', max_length=200, blank=True, null=True)  # Field name made lowercase.
@@ -663,12 +675,11 @@ class Categorias(models.Model):
     horasdetalle = models.CharField(db_column='HorasDetalle', max_length=60, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'categorias'
 
 
 class CertificacionesJubdocente(models.Model):
-    idd = models.AutoField(db_column='Idd', primary_key=True)
     anio = models.IntegerField(db_column='Anio')  # Field name made lowercase.
     edadmujer = models.IntegerField(db_column='EdadMujer')  # Field name made lowercase.
     edadhombre = models.IntegerField(db_column='EdadHombre')  # Field name made lowercase.
@@ -676,12 +687,11 @@ class CertificacionesJubdocente(models.Model):
     anioshombre = models.IntegerField(db_column='AniosHombre')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'certificaciones jubdocente'
 
 
 class CertificacionesJubedadavanzada(models.Model):
-    idd = models.AutoField(db_column='Idd', primary_key=True)
     anio = models.IntegerField(db_column='Anio')  # Field name made lowercase.
     edadmujer = models.IntegerField(db_column='EdadMujer')  # Field name made lowercase.
     edadhombre = models.IntegerField(db_column='EdadHombre')  # Field name made lowercase.
@@ -689,7 +699,7 @@ class CertificacionesJubedadavanzada(models.Model):
     anioshombre = models.IntegerField(db_column='AniosHombre')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'certificaciones jubedadavanzada'
 
 
@@ -789,7 +799,7 @@ class Seguridad(models.Model):
     estadistica = models.CharField(max_length=1)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'seguridad'
 
 
@@ -801,10 +811,32 @@ class Sysdiagrams(models.Model):
     definition = models.BinaryField(blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'sysdiagrams'
         unique_together = (('principal_id', 'name'),)
 
 
+class TempActaentrega(models.Model):
+    documento = models.CharField(max_length=8)
+    empresa = models.CharField(max_length=7)
+    control = models.CharField(max_length=1)
+    fecharecepcion = models.CharField(db_column='FechaRecepcion', max_length=10)  # Field name made lowercase.
+    fechapuestatramite = models.CharField(db_column='FechaPuestaTramite', max_length=10)  # Field name made lowercase.
+    apellido = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'temp_ActaEntrega'
 
 
+class TempProntodespacho(models.Model):
+    documento = models.CharField(max_length=8)
+    empresa = models.CharField(max_length=7)
+    control = models.CharField(max_length=1)
+    fecharecepcion = models.CharField(db_column='FechaRecepcion', max_length=10)  # Field name made lowercase.
+    fechapuestatramite = models.CharField(db_column='FechaPuestaTramite', max_length=10)  # Field name made lowercase.
+    apellido = models.CharField(db_column='Apellido', max_length=40, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'temp_ProntoDespacho'
