@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'CertificacionesProject.wsgi.application'
 DATABASES = {
        "default": {
         "ENGINE": "mssql",
-        "NAME": "certificaciones",
+        "NAME": "certificacionesprueba",
         "USER": "tercop",
         "PASSWORD": "Tercop1123",
         "HOST": "10.1.9.102",

@@ -32,12 +32,12 @@ class Certificaciones(models.Model):
     documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
     planilla = models.AutoField(db_column='Planilla', primary_key=True)  # Field name made lowercase.
-    empresa = models.ForeignKey('Empresas', models.DO_NOTHING, db_column='Empresa', blank=True, null=True)  # Field name made lowercase.
+    empresa = models.ForeignKey('Empresas', on_delete=models.CASCADE, db_column='Empresa', blank=True, null=True)  # Field name made lowercase.
     usuario = models.CharField(db_column='Usuario', max_length=50, blank=True, null=True)  # Field name made lowercase.
     fecha_pedido = models.DateTimeField(db_column='Fecha Pedido', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    cargo = models.ForeignKey('Categorias', models.DO_NOTHING, db_column='Cargo', blank=True, null=True)  # Field name made lowercase.
-    agrupamiento = models.ForeignKey(Agrupamientos, models.DO_NOTHING, db_column='Agrupamiento', blank=True, null=True)  # Field name made lowercase.
-    causa = models.ForeignKey('CertificacionesCausas', models.DO_NOTHING, db_column='Causa', blank=True, null=True)  # Field name made lowercase.
+    cargo = models.ForeignKey('Categorias', on_delete=models.CASCADE, db_column='Cargo', blank=True, null=True)  # Field name made lowercase.
+    agrupamiento = models.ForeignKey(Agrupamientos, on_delete=models.CASCADE, db_column='Agrupamiento', blank=True, null=True)  # Field name made lowercase.
+    causa = models.ForeignKey('CertificacionesCausas', on_delete=models.CASCADE, db_column='Causa', blank=True, null=True)  # Field name made lowercase.
     causa_cesacion = models.CharField(db_column='Causa Cesacion', max_length=600, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fecha_cesacion = models.DateTimeField(db_column='Fecha Cesacion', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fecha_ingreso = models.DateTimeField(db_column='Fecha Ingreso', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -143,11 +143,11 @@ class CertificacionesObservaciones(models.Model):
 
 class CertificacionesPedidos(models.Model):
     idd = models.AutoField(db_column='IDD', primary_key=True)  # Field name made lowercase.
-    empresa = models.ForeignKey('Empresas', models.DO_NOTHING, db_column='Empresa')  # Field name made lowercase.
+    empresa = models.ForeignKey('Empresas', on_delete=models.CASCADE, db_column='Empresa')  # Field name made lowercase.
     documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
     apellido = models.CharField(db_column='Apellido', max_length=40, blank=True, null=True)  # Field name made lowercase.
     fecha_pedido = models.DateTimeField(db_column='Fecha Pedido')  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    estado = models.ForeignKey(CertificacionesEstados, models.DO_NOTHING, db_column='Estado')  # Field name made lowercase.
+    estado = models.ForeignKey(CertificacionesEstados, on_delete=models.CASCADE, db_column='Estado')  # Field name made lowercase.
     nronota = models.CharField(db_column='NroNota', max_length=10, blank=True, null=True)  # Field name made lowercase.
     prioridad = models.IntegerField(db_column='Prioridad')  # Field name made lowercase.
     fecha = models.DateTimeField(db_column='Fecha', blank=True, null=True)  # Field name made lowercase.
@@ -183,7 +183,7 @@ class CertificacionesServicios(models.Model):
     planilla = models.DecimalField(db_column='Planilla', max_digits=18, decimal_places=0)  # Field name made lowercase.
     renglon = models.AutoField(db_column='Renglon', primary_key=True)  # Field name made lowercase.
     caracter = models.CharField(db_column='Caracter', max_length=2)  # Field name made lowercase.
-    cargo = models.ForeignKey('Categorias', models.DO_NOTHING, db_column='Cargo', blank=True, null=True)  # Field name made lowercase.
+    cargo = models.ForeignKey('Categorias', on_delete=models.CASCADE, db_column='Cargo', blank=True, null=True)  # Field name made lowercase.
     fecha_desde = models.DateTimeField(db_column='Fecha Desde')  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fecha_hasta = models.DateTimeField(db_column='Fecha Hasta')  # Field name made lowercase. Field renamed to remove unsuitable characters.
     interrupcion = models.CharField(db_column='Interrupcion', max_length=1, blank=True, null=True)  # Field name made lowercase.
@@ -205,7 +205,7 @@ class Certificacionesht(models.Model):
     documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
     fechaproceso = models.DateTimeField(db_column='FechaProceso', blank=True, null=True)  # Field name made lowercase.
-    empresa = models.ForeignKey('Empresas', models.DO_NOTHING, db_column='Empresa', blank=True, null=True)  # Field name made lowercase.
+    empresa = models.ForeignKey('Empresas', on_delete=models.CASCADE, db_column='Empresa', blank=True, null=True)  # Field name made lowercase.
     fechadesde = models.DateTimeField(db_column='FechaDesde', blank=True, null=True)  # Field name made lowercase.
     fechahasta = models.DateTimeField(db_column='FechaHasta', blank=True, null=True)  # Field name made lowercase.
     opccaja = models.CharField(db_column='OpcCaja', max_length=1, blank=True, null=True)  # Field name made lowercase.
@@ -568,7 +568,7 @@ class TomasCesesAdm(models.Model):
     fecha_desde = models.DateTimeField(db_column='Fecha Desde')  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fecha_hasta = models.CharField(db_column='Fecha hasta', max_length=10, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     dependencia = models.CharField(db_column='Dependencia', max_length=3)  # Field name made lowercase.
-    categoria = models.ForeignKey('Categorias', models.DO_NOTHING, db_column='Categoria')  # Field name made lowercase.
+    categoria = models.ForeignKey('Categorias', on_delete=models.CASCADE, db_column='Categoria')  # Field name made lowercase.
     agrupamiento = models.IntegerField(db_column='Agrupamiento')  # Field name made lowercase.
     planta = models.IntegerField(db_column='Planta')  # Field name made lowercase.
     responsabilidad = models.CharField(db_column='Responsabilidad', max_length=3, blank=True, null=True)  # Field name made lowercase.
