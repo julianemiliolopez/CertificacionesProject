@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'certificacionesprueba1.apps.Certificacionesprueba1Config',
     'bootstrap4',
+    'django_seed',
 ]
 
 MIDDLEWARE = [

@@ -18,6 +18,11 @@ class Agrupamientos(models.Model):
     class Meta:
         managed = True
         db_table = 'Agrupamientos'
+    def __str__(self):
+        return self.field_name
+    def get_absolute_url(self):
+        return reverse('model-detail-view', args=[str(self.id)])
+
 
 
 class CertifCeroDias(models.Model):
@@ -634,6 +639,8 @@ class Valorizaciones(models.Model):
     class Meta:
         managed = True
         db_table = 'Valorizaciones'
+    def __str__(self):
+        return self.field_name
 
 
 class Categorias(models.Model):
