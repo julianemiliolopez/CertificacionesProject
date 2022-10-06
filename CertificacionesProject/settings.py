@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'certificacionesprueba1.apps.Certificacionesprueba1Config',
     'bootstrap4',
     'django_seed',
+    'bootstrap5',
 ]
 
 MIDDLEWARE = [

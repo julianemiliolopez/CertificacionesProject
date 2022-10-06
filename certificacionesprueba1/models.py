@@ -672,6 +672,8 @@ class Categorias(models.Model):
     class Meta:
         managed = True
         db_table = 'categorias'
+        ordering = ['-idd']
+        
 
 
 class CertificacionesJubdocente(models.Model):

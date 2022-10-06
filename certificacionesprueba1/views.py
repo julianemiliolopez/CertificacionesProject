@@ -12,6 +12,11 @@ def mostrar(request):
     ##a_record.save()
     st=Categorias.objects.all()  # Collect all records from table 
     return render(request,'categorias/mostrar.html',{'st':st})
+def bootstrap(request):
+    ##a_record = Categorias()
+    ##a_record.save()
+    ##st=Categorias.objects.all()  # Collect all records from table 
+    return render(request,'categorias/bootstrap5.html')
 
 ##def mostrarCertificacionesPedidos(request):
 ##	st=CertificacionesPedidos.objects.all()  # Collect all records from table 
