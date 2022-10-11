@@ -5,7 +5,7 @@ from .models import CertificacionesPedidos
 
 # Create your views here.
 def index(request):
-    return HttpResponse("INDEX DE CERTIFICACIONES ")
+    return render(request, "home.html",{})
 
 def mostrar(request):
     ##a_record = Categorias()

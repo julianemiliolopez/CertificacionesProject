@@ -1,0 +1,387 @@
+{% extends 'base.html' %}
+
+{% block title %} Carga Certificaciones {% endblock %}
+
+
+{% include 'main/includes/navbar.html' %}
+
+{% block content %}
+{% include 'main/includes/navbar.html' %}
+
+<main role="main">
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">Hello, world!</h1>
+            <p>This is a template for a simple marketing or informational website. It includes a large callout called a
+                jumbotron and three supporting pieces of content. Use it as a starting point to create something more
+                unique.</p>
+            <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="container text-center">
+          
+            <div class="row align-items-center">
+              <div class="col">
+                <form method="post" id="certificacionespedidos_form" novalidate><input type="hidden" name="csrfmiddlewaretoken" value="ci6Xx2CnTgGiOlfJZ9DOoI5jpI6j9e5TdsFFyH1CsyugtDZk4WvCsbLdfSSqOtSE">
+                    <div>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                      <fieldset class="module aligned ">
+                        
+                        
+                        
+                            <div class="form-row field-empresa">
+                                
+                                
+                                    <div>
+                                        
+                                        
+                                            <label class="required" for="id_empresa">Empresa:</label>
+                                            
+                                                <div class="related-widget-wrapper">
+                        <select name="empresa" required id="id_empresa">
+                      <option value="" selected>---------</option>
+                    
+                      <option value="1">Peace. Parent important suffer staff hospital one arm.</option>
+                    
+                      <option value="2">Oil. Help cost second.</option>
+                    
+                      <option value="3">Live. Scene investment radio today.</option>
+                    
+                      <option value="4">Court. Tell cause the girl.</option>
+                    
+                      <option value="5">Among. Vote all approach bring statement country.</option>
+                    
+                      <option value="6">Stage. Region seem military hot.</option>
+                    
+                      <option value="7">Yes. Cup card real around argue would respond.</option>
+                    
+                      <option value="8">Fact. Majority when new government street nearly.</option>
+                    
+                      <option value="9">Dark. Parent onto boy consumer game political.</option>
+                    
+                      <option value="10">Fly. If beyond cost describe voice may.</option>
+                    
+                      <option value="11">Him. Break clearly six soon.</option>
+                    
+                      <option value="12">Stage. Story like nation upon thank arrive boy bank.</option>
+                    
+                      <option value="13">Major. Image service certain result. Do red trouble.</option>
+                    
+                      <option value="14">Quite. Performance in attention yard.</option>
+                    
+                      <option value="15">Past. Small light adult serve. Doctor case hotel.</option>
+                    
+                      <option value="16">AERO Dirección Provincial de Aeronáutica</option>
+                    
+                    </select>
+                        
+                            <a class="related-widget-wrapper-link change-related" id="change_id_empresa"
+                                data-href-template="/admin/certificacionesprueba1/empresas/__fk__/change/?_to_field=idd&amp;_popup=1"
+                                title="Cambiar empresas seleccionados"><img src="/static/admin/img/icon-changelink.svg" alt="Modificar"></a><a class="related-widget-wrapper-link add-related" id="add_id_empresa"
+                                href="/admin/certificacionesprueba1/empresas/add/?_to_field=idd&amp;_popup=1"
+                                title="Añadir otro empresas"><img src="/static/admin/img/icon-addlink.svg" alt="Añadir"></a>
+                        
+                    </div>
+                                            
+                                        
+                                        
+                                    </div>
+                                
+                            </div>
+                        
+                            <div class="form-row field-documento">
+                                
+                                
+                                    <div>
+                                        
+                                        
+                                            <label class="required" for="id_documento">Documento:</label>
+                                            
+                                                <input type="number" name="documento" step="1" required id="id_documento">
+                                            
+                                        
+                                        
+                                    </div>
+                                
+                            </div>
+                        
+                            <div class="form-row field-apellido_nombre">
+                                
+                                
+                                    <div>
+                                        
+                                        
+                                            <label for="id_apellido_nombre">Apellido nombre:</label>
+                                            
+                                                <input type="text" name="apellido_nombre" class="vTextField" maxlength="40" id="id_apellido_nombre">
+                                            
+                                        
+                                        
+                                    </div>
+                                
+                            </div>
+                        
+                            <div class="form-row field-fecha_pedido">
+                                
+                                
+                                    <div>
+                                        
+                                        
+                                            <label class="required" for="id_fecha_pedido_0">Fecha pedido:</label>
+                                            
+                                                <p class="datetime">
+                      Fecha: <input type="text" name="fecha_pedido_0" class="vDateField" size="10" required id="id_fecha_pedido_0">
+                    
+                    <br>
+                      Hora: <input type="text" name="fecha_pedido_1" class="vTimeField" size="8" required id="id_fecha_pedido_1">
+                    
+                    
+                    </p>
+                                            
+                                        
+                                        
+                                    </div>
+                                
+                            </div>
+                        
+                            <div class="form-row field-estado">
+                                
+                                
+                                    <div>
+                                        
+                                        
+                                            <label class="required" for="id_estado">Estado:</label>
+                                            
+                                                <div class="related-widget-wrapper">
+                        <select name="estado" required id="id_estado">
+                      <option value="" selected>---------</option>
+                    
+                      <option value="1">CertificacionesEstados object (1)</option>
+                    
+                      <option value="2">CertificacionesEstados object (2)</option>
+                    
+                      <option value="3">CertificacionesEstados object (3)</option>
+                    
+                      <option value="4">CertificacionesEstados object (4)</option>
+                    
+                      <option value="5">CertificacionesEstados object (5)</option>
+                    
+                      <option value="6">CertificacionesEstados object (6)</option>
+                    
+                      <option value="7">CertificacionesEstados object (7)</option>
+                    
+                      <option value="8">CertificacionesEstados object (8)</option>
+                    
+                      <option value="9">CertificacionesEstados object (9)</option>
+                    
+                      <option value="10">CertificacionesEstados object (10)</option>
+                    
+                      <option value="11">CertificacionesEstados object (11)</option>
+                    
+                      <option value="12">CertificacionesEstados object (12)</option>
+                    
+                      <option value="13">CertificacionesEstados object (13)</option>
+                    
+                      <option value="14">CertificacionesEstados object (14)</option>
+                    
+                      <option value="15">CertificacionesEstados object (15)</option>
+                    
+                      <option value="16">CertificacionesEstados object (16)</option>
+                    
+                      <option value="17">CertificacionesEstados object (17)</option>
+                    
+                      <option value="18">CertificacionesEstados object (18)</option>
+                    
+                      <option value="19">CertificacionesEstados object (19)</option>
+                    
+                      <option value="20">CertificacionesEstados object (20)</option>
+                    
+                      <option value="21">CertificacionesEstados object (21)</option>
+                    
+                      <option value="22">CertificacionesEstados object (22)</option>
+                    
+                      <option value="23">CertificacionesEstados object (23)</option>
+                    
+                      <option value="24">CertificacionesEstados object (24)</option>
+                    
+                      <option value="25">CertificacionesEstados object (25)</option>
+                    
+                      <option value="26">CertificacionesEstados object (26)</option>
+                    
+                      <option value="27">CertificacionesEstados object (27)</option>
+                    
+                      <option value="28">CertificacionesEstados object (28)</option>
+                    
+                      <option value="29">CertificacionesEstados object (29)</option>
+                    
+                      <option value="30">CertificacionesEstados object (30)</option>
+                    
+                    </select>
+                        
+                            
+                        
+                    </div>
+                                            
+                                        
+                                        
+                                    </div>
+                                
+                            </div>
+                        
+                            <div class="form-row field-nronota">
+                                
+                                
+                                    <div>
+                                        
+                                        
+                                            <label for="id_nronota">Nronota:</label>
+                                            
+                                                <input type="text" name="nronota" class="vTextField" maxlength="10" id="id_nronota">
+                                            
+                                        
+                                        
+                                    </div>
+                                
+                            </div>
+                        
+                            <div class="form-row field-prioridad">
+                                
+                                
+                                    <div>
+                                        
+                                        
+                                            <label class="required" for="id_prioridad">Prioridad:</label>
+                                            
+                                                <input type="number" name="prioridad" class="vIntegerField" required id="id_prioridad">
+                                            
+                                        
+                                        
+                                    </div>
+                                
+                            </div>
+                        
+                            <div class="form-row field-fecha">
+                                
+                                
+                                    <div>
+                                        
+                                        
+                                            <label for="id_fecha_0">Fecha:</label>
+                                            
+                                                <p class="datetime">
+                      Fecha: <input type="text" name="fecha_0" class="vDateField" size="10" id="id_fecha_0">
+                    
+                    <br>
+                      Hora: <input type="text" name="fecha_1" class="vTimeField" size="8" id="id_fecha_1">
+                    
+                    
+                    </p>
+                                            
+                                        
+                                        
+                                    </div>
+                                
+                            </div>
+                        
+                            <div class="form-row field-usuario">
+                                
+                                
+                                    <div>
+                                        
+                                        
+                                            <label for="id_usuario">Usuario:</label>
+                                            
+                                                <input type="text" name="usuario" class="vTextField" maxlength="50" id="id_usuario">
+                                            
+                                        
+                                        
+                                    </div>
+                                
+                            </div>
+                        
+                            <div class="form-row field-movim">
+                                
+                                
+                                    <div>
+                                        
+                                        
+                                            <label for="id_movim">Movim:</label>
+                                            
+                                                <input type="text" name="movim" class="vTextField" maxlength="1" id="id_movim">
+                                            
+                                        
+                                        
+                                    </div>
+                                
+                            </div>
+                        
+                    </fieldset>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <div class="submit-row">
+                    
+                    <input type="submit" value="Guardar" class="default" name="_save">
+                    
+                    
+                    <input type="submit" value="Guardar y añadir otro" name="_addanother">
+                    <input type="submit" value="Guardar y continuar editando" name="_continue">
+                    
+                    
+                    </div>
+                    
+                    
+                    
+                        <script id="django-admin-form-add-constants"
+                                src="/static/admin/js/change_form.js"
+                                
+                                    data-model-name="certificacionespedidos"
+                                
+                                async>
+                        </script>
+                    
+                    
+                    
+                    
+                    <script id="django-admin-prepopulated-fields-constants"
+                            src="/static/admin/js/prepopulate_init.js"
+                            data-prepopulated-fields="[]">
+                    </script>
+                    
+                    
+                    </div>
+                    </form>
+              </div>
+              
+            </div>
+            
+          </div>
+        
+    </div> <!-- /container -->
+
+</main>
+
+<footer class="container">
+    <p>&copy; Company 2017-2020</p>
+</footer>
+{% endblock %}
