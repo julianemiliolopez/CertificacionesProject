@@ -1,0 +1,526 @@
+'---------------------------------------------------------------------------------------
+' Module    : frmAlta_Certificaciones
+' Author    : Jlopez
+' Date      : 05/09/2016
+' Purpose   :
+'---------------------------------------------------------------------------------------
+
+Option Explicit
+Dim rs As ADODB.Recordset
+Dim SQL As String
+Dim Bandera As Boolean
+Dim frm As frmAlta_Certificaciones
+Dim EstadoPedido As String
+'VARIABLES CALCULA CERTIFICACION
+Dim FechaIngreso As Date
+Dim Legajo As String
+Dim Antiguedad As Integer
+Dim Estado As String
+Dim Sexo As String
+Dim AnioActual As String
+Dim FechaNacimiento As String
+Dim CumpleAportesProvincia As Boolean
+Dim CumpleAportesTotales As Boolean
+Dim CumpleEdad As Boolean
+Dim EdadJubilatoria As Integer
+Dim AniosServicio As Integer
+Dim TieneLiquidaciones As Boolean
+Dim TieneCertificaciones As Boolean
+Dim EdadActual As Integer
+Dim AniosServiciosHoy As Integer
+Dim DiferenciaServicio As Integer
+Dim DiferenciaEdad As Integer
+Dim DiferenciaAntiguedad As Integer
+Dim EdadAvanzada As Boolean
+Dim CajasVarias As Boolean
+Dim CertifInicial As Boolean
+Dim CertifAntig As Boolean
+Dim AmpliJub As Boolean
+Dim Ampliacion As Boolean
+Dim JubOrdinaria As Boolean
+Dim Prioridad As Integer
+Dim EstadoFiltro As String
+
+Private Sub cmbEmpresa_Click()
+    If Trim(cmbEmpresa.List(cmbEmpresa.ListIndex)) <> "DOCENT" Then
+        Carga_Combo_Agente
+    Else
+        Carga_Combo_NoAgente
+    End If
+End Sub
+
+Private Sub cmdGuardar_Click()
+    Validar
+    Verifica_Repetido
+    If Bandera = True Then
+        Calcular_Certificacion
+        If MsgBox("Confirma el ingreso de la solicitud? ", vbYesNo + vbExclamation, Me.Caption) = vbNo Then
+            Exit Sub
+        Else
+            Guardar
+            MsgBox "La solicitud ha sido grabada."
+            Unload Me
+            frmAlta_Certificaciones.Show
+        End If
+    End If
+End Sub
+
+Private Sub cmdModificar_Click()
+    frmConsulta_Certificaciones.Show
+End Sub
+
+Private Sub cmdSalir_Click()
+    Unload Me
+End Sub
+
+Private Sub dcPedido_Click(Area As Integer)
+    Set rs = New ADODB.Recordset
+    SQL = "SELECT [Descripcion Larga] FROM [Certificaciones Estados] WHERE Estado = '" & dcPedido.BoundText & "'"
+    rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+    If Not rs.EOF Then
+        If rs![Descripcion Larga] <> "" Then
+            lblLeyenda = rs![Descripcion Larga]
+        Else
+            lblLeyenda = ""
+        End If
+    End If
+End Sub
+
+Private Sub Form_KeyPress(KeyAscii As Integer)
+If KeyAscii = vbKeyEscape Then
+    Unload Me
+End If
+End Sub
+
+Private Sub Form_Load()
+    Lblformulario.Caption = Me.Name
+    
+    Dim INFO() As String
+    Dim c As String
+    c = Command$
+    INFO = Split(c, ",")
+    If UBound(INFO) <> 1 Then End
+    Conexion.usuario = INFO(0)
+    Conexion.terminal = INFO(1)
+    Conexion.ConectarDB
+End Sub
+
+
+Private Sub txtDocumento_LostFocus()
+    
+    On Error GoTo salida
+    Dim Contador As Integer
+    Dim EmpresaFiltro As String
+    Dim i As Integer
+    Contador = 0
+    If IsNumeric(txtDocumento) Then
+        Set rs = New ADODB.Recordset
+        SQL = "SELECT Apellido FROM PERSONAS WHERE DOCUMENTO = '" & txtDocumento & "'"
+        rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+        If Not rs.EOF Then
+            txtApellido = rs!Apellido
+        Else
+            MsgBox "La persona no pertenece a la administración pública."
+            Exit Sub
+        End If
+        Set rs = New ADODB.Recordset
+        SQL = "SELECT DISTINCT(Empresa) FROM Maestro WHERE DOCUMENTO = '" & txtDocumento & "' AND EMPRESA IN ('SECOS', 'SALUD', 'SAT', 'AERO', 'UPMF', 'DOCENT', 'EPU')"
+        rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+        Do While Not rs.EOF
+            Contador = Contador + 1
+            EmpresaFiltro = Trim(rs!empresa)
+            cmbEmpresa.AddItem Trim(rs!empresa)
+            rs.MoveNext
+        Loop
+
+        If Contador = 1 Then
+            lblComboEmpresa = ""
+            For i = 0 To cmbEmpresa.ListCount - 1
+                If Trim(cmbEmpresa.List(i)) = EmpresaFiltro Then
+                    cmbEmpresa.ListIndex = i
+                    Exit For
+                End If
+            Next i
+        Else
+            lblComboEmpresa = "Tiene más de un Legajo. Seleccione Empresa"
+        End If
+        cmbEmpresa.SetFocus
+    End If
+    
+salida:
+End Sub
+
+Private Sub Guardar()
+    Set rs = New ADODB.Recordset
+    SQL = "INSERT INTO [Certificaciones Pedidos] ([Empresa],[Documento],[Apellido],[Fecha Pedido],[Estado],[NroNota],[Prioridad],[Fecha],[Usuario],[Movim]) VALUES ('" & cmbEmpresa.List(cmbEmpresa.ListIndex) & "','" & txtDocumento & "','" & txtApellido & "','" & txtFechaPedido & "','" & EstadoPedido & "', '', '" & Prioridad & "', '" & Date & "','" & Conexion.usuario & "', 'A')"
+    rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+End Sub
+
+Private Sub Validar()
+    Bandera = True
+    If txtDocumento = "" Then
+        MsgBox "Debe ingresar un Nro. de Documento."
+        txtDocumento.SetFocus
+        Bandera = False
+        Exit Sub
+    End If
+    
+    If cmbEmpresa.List(cmbEmpresa.ListIndex) = "" Then
+        MsgBox "Debe seleccionar una Empresa."
+        cmbEmpresa.SetFocus
+        Bandera = False
+        Exit Sub
+    End If
+ 
+    If Not IsDate(txtFechaPedido) Then
+        MsgBox "Debe ingresar una Fecha Válida."
+        txtFechaPedido.SetFocus
+        Bandera = False
+        Exit Sub
+    End If
+    
+End Sub
+
+Private Sub Verifica_Repetido()
+    Set rs = New ADODB.Recordset
+    SQL = "SELECT * FROM [Certificaciones Pedidos] where Documento = '" & txtDocumento & "' and Empresa = '" & Trim(cmbEmpresa.Text) & "' and [Fecha Pedido] = '" & txtFechaPedido & "'"
+    rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+    If Not rs.EOF Then
+        MsgBox "Ya existe un pedido de Certificación para la misma Empresa y Fecha de pedido."
+        Bandera = False
+        txtFechaPedido.SetFocus
+        Exit Sub
+    End If
+End Sub
+
+Private Sub Carga_Combo_Agente()
+On Error GoTo salida
+    Set rs = New ADODB.Recordset
+    SQL = "SELECT Descripcion, estado FROM [Certificaciones Estados]"
+    rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+    With dcPedido
+        Set dcPedido.RowSource = rs
+        ' campo a mostrar en el datacombo
+        dcPedido.ListField = "Descripcion"
+        dcPedido.BoundColumn = "Estado"
+        Set dcPedido.DataSource = rs
+    End With
+    
+salida:
+    
+End Sub
+
+Private Sub Carga_Combo_NoAgente()
+
+On Error GoTo salida
+
+    Set rs = New ADODB.Recordset
+    SQL = "SELECT Descripcion, estado FROM [Certificaciones Estados] WHERE ESTADO NOT IN ('CM','SA')"
+    rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+    With dcPedido
+        Set dcPedido.RowSource = rs
+        ' campo a mostrar en el datacombo
+        dcPedido.ListField = "Descripcion"
+        dcPedido.BoundColumn = "Estado"
+        Set dcPedido.DataSource = rs
+    End With
+    
+salida:
+    
+End Sub
+
+Private Sub Busca_Estado()
+    Set rs = New ADODB.Recordset
+    SQL = "SELECT Estado, Prioridad FROM [Certificaciones Estados] WHERE Estado = '" & EstadoFiltro & "'"
+    rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+    If Not rs.EOF Then
+        EstadoPedido = rs!Estado
+        Prioridad = rs!Prioridad
+    End If
+End Sub
+'**************************************************************
+'**************************************************************
+Private Sub Calcular_Certificacion()
+
+    'Busco Fecha de ingreso y Antiguedad en el Maestro
+    Set rs = New ADODB.Recordset
+    SQL = "SELECT * FROM MAESTRO WHERE DOCUMENTO = '" & Trim(txtDocumento) & "' and Empresa = '" & Trim(cmbEmpresa.Text) & "' order by [Fecha Ingreso]"
+    rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+    If Not rs.EOF Then
+        FechaIngreso = rs![Fecha Ingreso]
+        Legajo = rs![Legajo]
+        Antiguedad = rs!Antiguedad
+        Estado = rs!Estado
+    End If
+    
+    'Busco Fecha Nacimiento y sexo en Personas
+    Set rs = New ADODB.Recordset
+    SQL = "SELECT * FROM PERSONAS WHERE DOCUMENTO = '" & Trim(txtDocumento) & "'"
+    rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+    If Not rs.EOF Then
+        FechaNacimiento = rs![Fecha de Nacimiento]
+        Sexo = rs!Sexo
+    End If
+    
+    'HARDCODE AÑO ACTUAL 2017
+    AnioActual = Year(Now) + 1
+    Ley_1076
+    
+End Sub
+
+Private Sub Ley_1076()
+        
+    If Year(FechaIngreso) >= "1985" Then
+        AniosServiciosHoy = DateDiff("y", Year(FechaIngreso), Year(Now))
+        If DateDiff("y", Year(FechaIngreso), Year(Now)) > 20 Then
+            'Cumple 20 años servicios
+            CumpleAportesProvincia = True
+        Else
+            CumpleAportesProvincia = False
+        End If
+        Busco_Anios_Aportes_Ordinaria
+        If Antiguedad >= AniosServicio Then
+            'Cumple  años aportes totales
+            CumpleAportesTotales = True
+        Else
+            CumpleAportesTotales = False
+        End If
+        EdadActual = DateDiff("y", Year(FechaNacimiento), Year(Now))
+        If DateDiff("y", Year(FechaNacimiento), Year(Now)) >= EdadJubilatoria Then
+            'Cumple condicion  edad
+            CumpleEdad = True
+        Else
+            CumpleEdad = False
+        End If
+        
+        Busco_Liquidaciones
+        Busco_Certificaciones
+        
+        'JUBILACION EDAD AVANZADA
+        '**********************************************************
+        If EdadActual >= 60 And AniosServiciosHoy >= 15 Then
+            Busca_EdadAvanzada
+            If (EdadActual >= EdadJubilatoria And AniosServiciosHoy >= AniosServicio) Then
+                'INSERT EN EDAD AVANZADA
+                EstadoFiltro = "JE"
+                Busca_Estado
+                EdadAvanzada = True
+            Else
+                'NO EDAD AVANZADA
+                EdadAvanzada = False
+            End If
+        Else
+            EdadAvanzada = False
+        End If
+        
+        'JUBILACION CAJAS VARIAS
+        '**********************************************************
+        If CumpleAportesProvincia = False And CumpleAportesTotales = False And CumpleEdad = True And TieneLiquidaciones = True Then
+            If dcPedido.BoundText = "JV" Then
+                'INSERT EN CAJAS VARIAS
+                EstadoFiltro = "JV"
+                Busca_Estado
+                CajasVarias = True
+            Else
+                'NO CAJAS VARIAS
+                CajasVarias = False
+            End If
+        Else
+            CajasVarias = False
+        End If
+        
+        'CERTIFICACION X ANTIGUEDAD
+        '**********************************************************
+        If CumpleAportesProvincia = False And CumpleAportesTotales = False And CumpleEdad = False And TieneLiquidaciones = True Then
+            If Estado = 5 Or Estado = 7 Or Estado = 9 Then
+                'INSERT EN CERTIFICACION X ANTIGUEDAD
+                EstadoFiltro = "CA"
+                Busca_Estado
+                CertifAntig = True
+            Else
+                'NO CERTIFICACION X ANTIGUEDAD
+                CertifAntig = False
+            End If
+        Else
+            CertifAntig = False
+        End If
+        
+        'CERTIFICACION X AMPLIACION
+        '**********************************************************
+        If CumpleAportesProvincia = False And CumpleAportesTotales = False And CumpleEdad = False And TieneCertificaciones = True Then
+            Busco_Anios_Aportes_Ordinaria
+            DiferenciaServicio = 20 - AniosServiciosHoy '20 FIJO PORQUE LA TABLA ESTA INCOMPLETA
+            DiferenciaEdad = EdadJubilatoria - EdadActual
+            DiferenciaAntiguedad = AniosServicio - Antiguedad
+            If (DiferenciaServicio <= 1 Or DiferenciaEdad <= 1 Or DiferenciaAntiguedad <= 1) Then
+                'ESTA A MENOS DE 1 AÑO DE CUMPLIR CON ALGUNA DE LAS CONDICIONES PARA JUBILARSE
+                'INSERT EN CERTIFICACION X AMPLIACION
+                EstadoFiltro = "AC"
+                Busca_Estado
+                Ampliacion = True
+            Else
+                'INSERT EN CERTIFICACION X AMPLIACION
+                EstadoFiltro = "AC"
+                Busca_Estado
+                Ampliacion = True
+            End If
+        Else
+            Ampliacion = False
+        End If
+        
+        'AMPLIACION X JUBILACION
+        '**********************************************************
+        If TieneCertificaciones = True Then
+            '                                                                                                                                                                                                                                           HASTA ACA CUMPLE 1 DE 3 CONDICIONES                                                                                                                                                                                                                                          HASTA ACA CUMPLE 2 DE 3 CONDICIONES                                                                        ACA 3 CONDICIONES
+            If (CumpleAportesProvincia = False And CumpleAportesTotales = False And CumpleEdad = True) Or (CumpleAportesProvincia = False And CumpleAportesTotales = True And CumpleEdad = False) Or (CumpleAportesProvincia = True And CumpleAportesTotales = False And CumpleEdad = False) Or (CumpleAportesProvincia = True And CumpleAportesTotales = True And CumpleEdad = False) Or (CumpleAportesProvincia = True And CumpleAportesTotales = False And CumpleEdad = True) Or (CumpleAportesProvincia = False And CumpleAportesTotales = True And CumpleEdad = True) Or (CumpleAportesProvincia = True And CumpleAportesTotales = True And CumpleEdad = True) Then
+                If CajasVarias = False And EdadAvanzada = False And (dcPedido.BoundText <> "CM" And dcPedido.BoundText <> "SA") Then
+                    'INSERTA AMPLIACION X JUBILACION
+                    EstadoFiltro = "AJ"
+                    Busca_Estado
+                    AmpliJub = True
+                Else
+                    AmpliJub = False
+                End If
+            Else
+                AmpliJub = False
+            End If
+        Else
+            AmpliJub = False
+            CertifInicial = False
+            'JUBILACION ORDINARIA
+            '**********************************************************
+            If (CumpleAportesProvincia = True And CumpleAportesTotales = True And CumpleEdad = True) Then
+                'INSERTA JUBILACION ORDINARIA
+                EstadoFiltro = "JO"
+                Busca_Estado
+                JubOrdinaria = True
+            Else
+                JubOrdinaria = False
+                'CERTIFICACION INICIAL
+                '**********************************************************
+                'INSERT EN CERTIFICACION INICIAL
+                EstadoFiltro = "CI"
+                Busca_Estado
+                CertifInicial = True
+            End If
+        End If
+        
+
+        'CERTIFICACION + ACTO ADMINISTRATIVO o SOLO ACTO ADMINISTRATIVO
+        If (EdadAvanzada = False And CajasVarias = False And CertifInicial = False And CertifAntig = False And AmpliJub = False And Ampliacion = False And JubOrdinaria = False) Then
+            If (dcPedido.BoundText = "CM" Or dcPedido.BoundText = "SA") And Trim(cmbEmpresa.Text) <> "DOCENT" Then
+                Select Case dcPedido.BoundText
+                    Case "SA"
+                        EstadoFiltro = "SA"
+                        Busca_Estado
+                        'INSERTA SOLO ACTO ADMINISTRATIVO
+                    Case "CM"
+                        EstadoFiltro = "CM"
+                        Busca_Estado
+                        'INSERTA CERTIFICACION + ACTO ADMINISTRATIVO
+                End Select
+            End If
+        End If
+    End If
+
+End Sub
+
+'TABLAS JUB. ORDINARIA
+Private Sub Busco_Anios_Aportes_Ordinaria()
+    Set rs = New ADODB.Recordset
+    'HOMBRE
+    If Sexo = "M" Then
+        SQL = "SELECT TOP 1 EdadHombre, AniosHombre FROM [Certificaciones JubOrdinaria] WHERE Anio <= '" & AnioActual & "'"
+        rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+        If Not rs.EOF Then
+            EdadJubilatoria = rs!EdadHombre
+            AniosServicio = rs!AniosHombre
+        End If
+    Else
+        'MUJER
+        SQL = "SELECT TOP 1 EdadMujer, AniosMujer FROM [Certificaciones JubOrdinaria] WHERE Anio <= '" & AnioActual & "'"
+        rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+        If Not rs.EOF Then
+            EdadJubilatoria = rs!EdadMujer
+            AniosServicio = rs!AniosMujer
+        End If
+    End If
+End Sub
+
+'TABLAS EDAD AVANZADA
+Private Sub Busca_EdadAvanzada()
+    Set rs = New ADODB.Recordset
+    'HOMBRE
+    If Sexo = "M" Then
+        SQL = "SELECT TOP 1 EdadHombre, AniosHombre FROM [Certificaciones JubEdadAvanzada] WHERE Anio <= '" & AnioActual & "'"
+        rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+        If Not rs.EOF Then
+            EdadJubilatoria = rs!EdadHombre
+            AniosServicio = rs!AniosHombre
+        End If
+    Else
+        'MUJER
+        SQL = "SELECT TOP 1 EdadMujer, AniosMujer FROM [Certificaciones JubEdadAvanzada] WHERE Anio <= '" & AnioActual & "'"
+        rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+        If Not rs.EOF Then
+            EdadJubilatoria = rs!EdadMujer
+            AniosServicio = rs!AniosMujer
+        End If
+    End If
+End Sub
+
+'TABLAS JUB. DOCENTE
+'FALTARIA EVALUAR SI NO ES EDUCACIÓN ESPECIAL Y NO TIENE + DE 21 HS
+Private Sub Busca_JubDocente()
+    Set rs = New ADODB.Recordset
+    'HOMBRE
+    If Sexo = "M" Then
+        SQL = "SELECT TOP 1 EdadHombre, AniosHombre FROM [Certificaciones JubDocente] WHERE Anio <= '" & AnioActual & "'"
+        rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+        If Not rs.EOF Then
+            EdadJubilatoria = rs!EdadHombre
+            AniosServicio = rs!AniosHombre
+        End If
+    Else
+        'MUJER
+        SQL = "SELECT TOP 1 EdadMujer, AniosMujer FROM [Certificaciones JubDocente] WHERE Anio <= '" & AnioActual & "'"
+        rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+        If Not rs.EOF Then
+            EdadJubilatoria = rs!EdadMujer
+            AniosServicio = rs!AniosMujer
+        End If
+    End If
+End Sub
+
+Private Sub Busco_Liquidaciones()
+    'Busco si la personas tiene liquidaciones
+    Set rs = New ADODB.Recordset
+    SQL = "SELECT * FROM LEGAJOS WHERE DOCUMENTO = '" & Trim(txtDocumento) & "' AND LEGAJO = '" & Legajo & "'"
+    rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+    If Not rs.EOF Then
+        TieneLiquidaciones = True
+    Else
+        TieneLiquidaciones = False
+    End If
+End Sub
+
+Private Sub Busco_Certificaciones()
+    'Busco si la persona tiene certificaciones cargadas
+    Set rs = New ADODB.Recordset
+    SQL = "SELECT * FROM CERTIFICACIONES WHERE DOCUMENTO = '" & Trim(txtDocumento) & "' AND LEGAJO = '" & Legajo & "'"
+    rs.Open SQL, DB, adOpenStatic, adLockOptimistic
+    If Not rs.EOF Then
+        TieneCertificaciones = True
+    Else
+        TieneCertificaciones = False
+    End If
+End Sub
+
+
+
+
+
+
+
+
+
