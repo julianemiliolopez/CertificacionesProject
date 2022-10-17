@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %} Resultados Búsqueda de Personas {% endblock %}
+
+
+{% include 'main/includes/navbar.html' %}
+
+{% block content %}
+{% include 'main/includes/navbar.html' %}
+
+<main role="main">
+  
+  {% if error_msg %}
+  <p>{{ error_msg }}</p>
+  {% endif %}
+
+  
+  <h1>Lista de Personas</h1>
+    <table class="table table-dark" border="1" width="600">
+    <tr>
+    <td>Documento</td>
+    <td>Apellido</td>
+    <td>Nombre</td>
+    <td>Domicilio</td>
+    <td>Telefono</td>
+    <td>Email</td>
+    <td>Localidad</td>
+    <td>Fecha de Nacimiento</td>
+    <td>Sexo</td>
+    </tr>
+    {% for sts in lista_personas %}
+    <tr>
+    <td>{{ sts.documento }}</td>
+    <td>
+    {{ sts.apellido }}</td>
+    <td> {{ sts.nombre }}
+    </td>
+    <td> {{ sts.domicilio }}
+    </td>
+    <td> {{ sts.telefono }}
+    </td>
+    <td> {{ sts.email}}
+    </td>
+    <td> {{ sts.localidad }}
+    </td>
+    <td> {{ sts.fecha_de_nacimiento }}
+    </td>
+    <td> {{ sts.sexo }}
+    </td>
+    </tr>
+    
+    </table>
+
+
+  {% empty %}
+  <div class="no-post">No hay ninguna persona con ese documento y ese nombre y apellido</div>
+  {% endfor %}
+
+
+</main>
+
+<footer class="container">
+    <p>&copy; Company 2017-2020</p>
+</footer>
+{% endblock %}

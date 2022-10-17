@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_seed',
     'bootstrap5',
+    'certificacionesprueba1',
 ]
 
 MIDDLEWARE = [
@@ -82,21 +83,19 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    "sqlserver": {
+        "ENGINE": "mssql",
+        "NAME": "personas",
+        "USER": "tercop",
+        "PASSWORD": "Tercop1123",
+        "HOST": "10.1.9.102",
+        "PORT": "1433",
+        "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", 
+        },
     }
 }
 
-##DATABASES = {
-  ##     "default": {
-    ##    "ENGINE": "mssql",
-      ##  "NAME": "certificacionesprueba",
-      ##  "USER": "tercop",
-      ##  "PASSWORD": "Tercop1123",
-      ##  "HOST": "10.1.9.102",
-      ##  "PORT": "1433",
-      ##  "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", 
-      ##  },
-   ## },
-##}
 
 
 # Password validation

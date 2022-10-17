@@ -9,6 +9,9 @@
 {% include 'main/includes/navbar.html' %}
 
 <main role="main">
+  <form action="{% url 'Detalle' %}" method="get">
+    <input name="q" type="number" placeholder="Buscar DNI">
+  </form>
         <form action="/team_name_url/" method="post">
                         <div class="row">
                           <div class="col">

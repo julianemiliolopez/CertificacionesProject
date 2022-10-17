@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %} Listado de Personas en SQL Server {% endblock %}
+
+
+{% include 'main/includes/navbar.html' %}
+
+{% block content %}
+{% include 'main/includes/navbar.html' %}
+<body>
+    
+
+
+    <h1>Lista de categorias</h1>
+    <table class="table table-dark" border="1" width="600">
+    <tr>
+    <td>Documento</td>
+    <td>Apellido</td>
+    <td>Nombre</td>
+    <td>Domicilio</td>
+    <td>Telefono</td>
+    <td>Email</td>
+    <td>Localidad</td>
+    <td>Fecha de Nacimiento</td>
+    <td>Sexo</td>
+    </tr>
+    {% for sts in page_obj.st %}
+    <tr>
+    <td>{{ sts.documento }}</td>
+    <td>
+    {{ sts.apellido }}</td>
+    <td> {{ sts.nombre }}
+    </td>
+    <td> {{ sts.domicilio }}
+    </td>
+    <td> {{ sts.telefono }}
+    </td>
+    <td> {{ sts.email}}
+    </td>
+    <td> {{ sts.localidad }}
+    </td>
+    <td> {{ sts.fecha_de_nacimiento }}
+    </td>
+    <td> {{ sts.sexo }}
+    </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    
+    </body>
+    
+    {% block pagination %}
+    <div class="pagination">
+      <span class="step-links">
+          {% if page_obj.has_previous %}          
+              <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+          {% endif %}
+  
+          <span class="current">
+            {{ page_obj.number }}
+          </span>
+  
+          {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}">next</a>
+          {% endif %}
+      </span>
+  </div>
+  {% endblock %}
+
+    <footer class="container">
+      <p>&copy; Company 2017-2020</p>
+  </footer>
+  {% endblock %}
+
+  

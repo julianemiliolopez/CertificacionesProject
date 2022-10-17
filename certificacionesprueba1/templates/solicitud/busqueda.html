@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Carga Certificaciones {% endblock %}
+
+
+{% include 'main/includes/navbar.html' %}
+
+{% block content %}
+{% include 'main/includes/navbar.html' %}
+
+<main role="main">
+  </form>
+        <form  method="GET" action="{% url 'certificacionesprueba1:buscar' %}">
+                        <div class="row">
+                          <div class="col">
+                            <label for="q">Ingresar el Numero de Documento o el Nombre y Apellido: </label>
+                            <input id="q"  type="text" class="form-control" placeholder="q" name="q" default = "DNI o Nombre de la persona a buscar">
+                          </div>
+                        </div>
+         </form> 
+
+</main>
+
+<footer class="container">
+    <p>&copy; Company 2017-2020</p>
+</footer>
+{% endblock %}

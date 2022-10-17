@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %} Detalle de Persona {% endblock %}
+
+
+{% include 'main/includes/navbar.html' %}
+
+{% block content %}
+{% include 'main/includes/navbar.html' %}
+<body>
+    
+
+
+    <h1>Detalle de Persona</h1>
+    <table class="table table-dark" border="1" width="600">
+    <tr>
+    <td>Documento</td>
+    <td>Apellido</td>
+    <td>Nombre</td>
+    <td>Domicilio</td>
+    <td>Telefono</td>
+    <td>Email</td>
+    <td>Localidad</td>
+    <td>Fecha de Nacimiento</td>
+    <td>Sexo</td>
+    </tr>
+    
+    <tr>
+    <td>{{ SQLServerPersona.documento }}</td>
+    <td>
+    {{ SQLServerPersona.apellido }}</td>
+    <td> {{ SQLServerPersona.nombre }}
+    </td>
+    <td> {{ SQLServerPersona.domicilio }}
+    </td>
+    <td> {{ SQLServerPersona.telefono }}
+    </td>
+    <td> {{ SQLServerPersona.email}}
+    </td>
+    <td> {{ SQLServerPersona.localidad }}
+    </td>
+    <td> {{ SQLServerPersona.fecha_de_nacimiento }}
+    </td>
+    <td> {{ SQLServerPersona.sexo }}
+    </td>
+    </tr>
+    
+    </table>
+
+   
+    </body>
+    
+
+
+    <footer class="container">
+      <p>&copy; Company 2017-2020</p>
+  </footer>
+  {% endblock %}
