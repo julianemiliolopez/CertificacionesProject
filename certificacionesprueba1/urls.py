@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from django.urls import re_path
+app_name = "certificaciones"
 
 urlpatterns = [
     re_path(r'^$', views.index, name='index'),
@@ -11,7 +12,10 @@ urlpatterns = [
     path('personas/detalle',views.mostrarPersonasSQLServer,name='Mostrar Personas'),
     path('solicitud/busqueda/', views.busqueda, name='busqueda'),
     
-   path('solicitud/resultados/', views.buscar, name='resultados')
+   path('solicitud/resultados/', views.buscar, name='buscar'),
+   path('solicitud/crear/', views.crear, name='crear'),
+   path('solicitud/modificar/', views.modificar, name='modificar'),
+   path('solicitud/eliminar/', views.eliminar, name='eliminar'),
     
     ##path('certificacionespedidos/mostrar',views.mostrarCertificacionesPedidos,name='mostrar'),
 ]

@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block title %} Resultados Búsqueda de Personas {% endblock %}
+{% block subtitulo %} Resultados Búsqueda de Personas {% endblock %}
 
 
-{% include 'main/includes/navbar.html' %}
 
 {% block content %}
-{% include 'main/includes/navbar.html' %}
 
-<main role="main">
+
+
   
   {% if error_msg %}
   <p>{{ error_msg }}</p>
@@ -16,7 +16,7 @@
 
   
   <h1>Lista de Personas</h1>
-    <table class="table table-dark" border="1" width="600">
+    <table class="table table-dark" border="2" width="80%" style="text-justify:center; margin-left: 10px; margin-right:80px !important;">
     <tr>
     <td>Documento</td>
     <td>Apellido</td>
@@ -27,6 +27,9 @@
     <td>Localidad</td>
     <td>Fecha de Nacimiento</td>
     <td>Sexo</td>
+    <td>Crear Solicitud</td>
+    <td>Modificar Solicitud</td>
+    <td>Eliminar Solicitud</td>
     </tr>
     {% for sts in lista_personas %}
     <tr>
@@ -47,19 +50,36 @@
     </td>
     <td> {{ sts.sexo }}
     </td>
-    </tr>
+    <td> 
+      <form action="{% url 'certificaciones:crear' %}">
+        
+        <button type="submit" class="btn btn-success btn-block mb-8" style="justify-content: center; margin-top: 10px">Crear</button>
+      
+    </form>
+    </td>
+    <td> <form action="{% url 'certificaciones:modificar' %}">
+        
+      <button type="submit" class="btn btn-warning btn-block mb-8" style="justify-content: center; margin-top: 10px">Modificar</button>
     
+  </form>
+    </td>
+    <td><form action="{% url 'certificaciones:eliminar' %}">
+        
+      <button type="submit" class="btn btn-danger btn-block mb-8" style="justify-content: center; margin-top: 10px">Eliminar</button>
+    
+  </form>
+    </td>
+    </tr>
+    {% endfor %}
     </table>
 
 
-  {% empty %}
-  <div class="no-post">No hay ninguna persona con ese documento y ese nombre y apellido</div>
-  {% endfor %}
+  
 
 
-</main>
+
 
 <footer class="container">
-    <p>&copy; Company 2017-2020</p>
+    <p>&copy; Prototipo</p>
 </footer>
 {% endblock %}

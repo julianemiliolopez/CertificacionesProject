@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'django_seed',
     'bootstrap5',
-    'certificacionesprueba1',
+    
 ]
 
 MIDDLEWARE = [

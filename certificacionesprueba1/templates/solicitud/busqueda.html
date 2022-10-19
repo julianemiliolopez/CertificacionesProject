@@ -1,27 +1,62 @@
+<style type="text/css">
+  input[type=text] {
+   
+   
+    width: 96%;
+    transition: width 0.4s ease-in-out !important;
+  }
+  input[type=text]:focus {
+    width: 100%;
+    
+    background-color: lightgrey;
+    
+  }
+
+
+</style>
 {% extends 'base.html' %}
+{% block titulo_de_pagina %} Solicitud de Certificaciones {% endblock %}
+{% block subtitulo %} Solicitud de Certificaciones {% endblock %}
 
-{% block title %} Carga Certificaciones {% endblock %}
-
-
-{% include 'main/includes/navbar.html' %}
 
 {% block content %}
-{% include 'main/includes/navbar.html' %}
 
-<main role="main">
-  </form>
-        <form  method="GET" action="{% url 'certificacionesprueba1:buscar' %}">
-                        <div class="row">
-                          <div class="col">
-                            <label for="q">Ingresar el Numero de Documento o el Nombre y Apellido: </label>
-                            <input id="q"  type="text" class="form-control" placeholder="q" name="q" default = "DNI o Nombre de la persona a buscar">
-                          </div>
-                        </div>
-         </form> 
 
-</main>
+
+<div class="container">
+  
+  <div class="row">
+    <div class="col">
+     
+    </div>
+    <div class="col-9">
+      <form  method="GET" action="{% url 'certificaciones:buscar' %}">
+        <div class="row" style= "margin-top: 60px;" >
+          <div class="col">
+            <div class="box" style="justify-content: center; display: flex;  
+            flex-wrap: wrap; text-align: center" >
+            <label for="q" style="font-size: 110%; font-weight:600;justify-content: center; display: flex;  
+            flex-wrap: wrap; text-shadow: 1px 1px 10px #808080; margin-bottom: 4px;">Ingresar el Numero de Documento o el Nombre y Apellido: </label>
+            <input id="q"  type="text" class="form-control" style="" placeholder="" name="q" default = "DNI o Nombre de la persona a buscar">
+            <button type="submit" class="btn btn-primary btn-block mb-8" style="justify-content: center; margin-top: 10px">Buscar</button>
+          
+          </div>
+          </div>
+        </div>
+      </form> 
+    </div>
+    <div class="col">
+      
+    </div>
+  </div>
+</div>
+    
+   
+        
+        
+
 
 <footer class="container">
-    <p>&copy; Company 2017-2020</p>
+    <p>&copy; Prototipo</p>
 </footer>
 {% endblock %}
