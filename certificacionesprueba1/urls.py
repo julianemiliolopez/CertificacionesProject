@@ -11,6 +11,7 @@ urlpatterns = [
     ##path('personas/mostrar',views.mostrarPersonas,name='Mostrar Personas'),
     path('personas/detalle',views.mostrarPersonasSQLServer,name='Mostrar Personas'),
     path('solicitud/busqueda/', views.busqueda, name='busqueda'),
+    path('home/', views.convertirMaestro, name='convertirMaestro'),
     
    path('solicitud/resultados/', views.buscar, name='buscar'),
    path('solicitud/crear/', views.crear, name='crear'),

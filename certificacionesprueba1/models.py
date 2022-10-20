@@ -38,12 +38,12 @@ class Certificaciones(models.Model):
     documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
     planilla = models.AutoField(db_column='Planilla', primary_key=True)  # Field name made lowercase.
-    empresa = models.ForeignKey('Empresas', on_delete=models.CASCADE, db_column='Empresa', blank=True, null=True)  # Field name made lowercase.
+    empresa = models.ForeignKey('Empresas', on_delete=models.DO_NOTHING, db_column='Empresa', blank=True, null=True)  # Field name made lowercase.
     usuario = models.CharField(db_column='Usuario', max_length=50, blank=True, null=True)  # Field name made lowercase.
     fecha_pedido = models.DateTimeField(db_column='Fecha Pedido', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    cargo = models.ForeignKey('Categorias', on_delete=models.CASCADE, db_column='Cargo', blank=True, null=True)  # Field name made lowercase.
-    agrupamiento = models.ForeignKey(Agrupamientos, on_delete=models.CASCADE, db_column='Agrupamiento', blank=True, null=True)  # Field name made lowercase.
-    causa = models.ForeignKey('CertificacionesCausas', on_delete=models.CASCADE, db_column='Causa', blank=True, null=True)  # Field name made lowercase.
+    cargo = models.ForeignKey('Categorias', on_delete=models.DO_NOTHING, db_column='Cargo', blank=True, null=True)  # Field name made lowercase.
+    agrupamiento = models.ForeignKey(Agrupamientos, on_delete=models.DO_NOTHING, db_column='Agrupamiento', blank=True, null=True)  # Field name made lowercase.
+    causa = models.ForeignKey('CertificacionesCausas', on_delete=models.DO_NOTHING, db_column='Causa', blank=True, null=True)  # Field name made lowercase.
     causa_cesacion = models.CharField(db_column='Causa Cesacion', max_length=600, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fecha_cesacion = models.DateTimeField(db_column='Fecha Cesacion', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fecha_ingreso = models.DateTimeField(db_column='Fecha Ingreso', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -300,6 +300,31 @@ class Empresas(models.Model):
        ('DOCENT', 'DOCENT'),
        ('DOCPRI', 'DOCPRI'),
        ('DOCSEC', 'DOCSEC'),
+       ('POLICI', 'POLICI'),
+       ('VETERA', 'VETERA'),
+       ('PATRO', 'PATRO'),
+       ('JUVENI', 'JUVENI'),
+       ('SUBSID', 'SUBSID'),
+       ('VIALID', 'VIALID'),
+       ('POLRET', 'POLRET'),
+       ('PEL', 'PEL'),
+       ('UOCRA', 'UOCRA'),
+       ('SAT', 'SAT'),
+       ('SALUD', 'SALUD'),
+       ('PENSIO', 'PENSIO'),
+       ('CONTA', 'CONTA'),
+       ('PENIT', 'PENIT'),
+       ('EPU', 'EPU'),
+       ('PASANT', 'PASANT'),
+       ('SALCAP', 'SALCAP'),
+       ('POLCIV', 'POLCIV'),
+       ('UPMF', 'UPMF'),
+       ('POLCAJ', 'POLCAJ'),
+       ('UNTDF', 'UNTDF'),
+       ('VIAXXX', 'VIAXXX'),
+       ('FUNGAB', 'FUNGAB'),
+       ('VEJEZ', 'VEJEZ'),
+       ('DISCA', 'DISCA'),
     ]   
     idd = models.AutoField(db_column='Idd', primary_key=True)  # Field name made lowercase.
     codigo = models.CharField(db_column='Codigo', max_length=6, choices=OPCIONES_EMPRESA)  # Field name made lowercase.
@@ -338,7 +363,7 @@ class Legajos(models.Model):
     documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
     idd_legajos = models.DecimalField(max_digits=18, decimal_places=0)
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
-    empresa = models.CharField(db_column='Empresa', max_length=6)  # Field name made lowercase.
+    empresa = models.ForeignKey('Empresas', on_delete=models.DO_NOTHING, db_column='Empresa', blank=True, null=True) # Field name made lowercase.
     fecha_proceso = models.DateTimeField(db_column='Fecha Proceso')  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fecha_ingreso = models.DateTimeField(db_column='Fecha Ingreso', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fecha_egreso = models.DateTimeField(db_column='Fecha Egreso', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -385,53 +410,6 @@ class Liquidacion(models.Model):
         db_table = 'Liquidacion'
         unique_together = (('documento', 'idd_legajos', 'idd_concepto', 'orden'),)
 
-
-class Maestro(models.Model):
-    idd = models.AutoField(db_column='Idd', primary_key=True)
-    documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
-    legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
-    fecha_proceso = models.DateTimeField(db_column='Fecha Proceso')  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    empresa = models.CharField(db_column='Empresa', max_length=6)  # Field name made lowercase.
-    estado = models.CharField(db_column='Estado', max_length=1)  # Field name made lowercase.
-    fecha_ingreso = models.DateTimeField(db_column='Fecha Ingreso', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    fecha_egreso = models.CharField(db_column='Fecha Egreso', max_length=10, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    dependencia = models.CharField(db_column='Dependencia', max_length=3)  # Field name made lowercase.
-    cargo = models.CharField(db_column='Cargo', max_length=3, blank=True, null=True)  # Field name made lowercase.
-    cargo_reemplazo = models.CharField(db_column='Cargo Reemplazo', max_length=3, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    cargo_retroactivo = models.CharField(db_column='Cargo Retroactivo', max_length=3, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    cantidad_horas = models.DecimalField(db_column='Cantidad Horas', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    antiguedad = models.DecimalField(db_column='Antiguedad', max_digits=18, decimal_places=0)  # Field name made lowercase.
-    antiguedad_decreto = models.DecimalField(db_column='Antiguedad Decreto', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    seguro_obligatorio = models.CharField(db_column='Seguro Obligatorio', max_length=1, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    seguro_familiar = models.CharField(db_column='Seguro Familiar', max_length=1, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    seguro_colectivo = models.CharField(db_column='Seguro Colectivo', max_length=1, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    maternidad_fecha_salida = models.CharField(db_column='Maternidad Fecha Salida', max_length=10, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    maternidad_total_dias = models.DecimalField(db_column='Maternidad Total Dias', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    licencia = models.CharField(db_column='Licencia', max_length=1, blank=True, null=True)  # Field name made lowercase.
-    sindicato_ate = models.CharField(db_column='Sindicato ATE', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    sindicato_atsa = models.CharField(db_column='Sindicato ATSA', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    sindicato_upcn = models.CharField(db_column='Sindicato UPCN', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    dependencia_fisica = models.CharField(db_column='Dependencia Fisica', max_length=3, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    aporte_jubilatorio = models.DecimalField(db_column='Aporte Jubilatorio', max_digits=18, decimal_places=4)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    sindicato_sat = models.CharField(db_column='Sindicato SAT', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    obra_social = models.CharField(db_column='Obra Social', max_length=2)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    obra_social_fam_cargo = models.DecimalField(db_column='Obra Social Fam Cargo', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    vacaciones_dias = models.DecimalField(db_column='Vacaciones Dias', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    caja_complementaria = models.DecimalField(db_column='Caja Complementaria', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    situacion_revista = models.CharField(db_column='Situacion Revista', max_length=1, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    fecha_liquidacion = models.CharField(db_column='Fecha Liquidacion', max_length=10, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    tarea = models.CharField(db_column='Tarea', max_length=1, blank=True, null=True)  # Field name made lowercase.
-    legajo_historico = models.CharField(db_column='Legajo Historico', max_length=30, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    motivo_baja = models.CharField(db_column='Motivo Baja', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    derecho_ocupacion = models.DecimalField(db_column='Derecho Ocupacion', max_digits=18, decimal_places=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    art = models.IntegerField(db_column='ART', blank=True, null=True)  # Field name made lowercase.
-    idmaestro = models.IntegerField(db_column='IDMaestro')  # Field name made lowercase.
-    origen = models.CharField(max_length=10, blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'Maestro'
-        unique_together = (('documento', 'legajo', 'fecha_proceso', 'empresa'),)
 
 
 class Parametros(models.Model):
@@ -491,7 +469,7 @@ class Parametros(models.Model):
 
 class Personas(models.Model):
     id = models.AutoField(primary_key=True)
-    documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0, unique=True)  # Field name made lowercase.
     apellido = models.CharField(db_column='Apellido', max_length=80)  # Field name made lowercase.
     apellidosolo = models.CharField(db_column='apellidoSolo', max_length=40)  # Field name made lowercase.
     nombre = models.CharField(max_length=40)
@@ -534,6 +512,54 @@ class ReemplazoAplicativos(models.Model):
         managed = True
         db_table = 'Reemplazo_aplicativos'
 
+class Maestro(models.Model):
+    idd = models.AutoField(db_column='Idd', primary_key=True)
+    documento = models.ForeignKey(Personas, to_field="documento", db_column="Documento", on_delete=models.DO_NOTHING)  # Field name made lowercase.
+    legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    fecha_proceso = models.DateTimeField(db_column='Fecha Proceso')  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    empresa = models.ForeignKey('Empresas', on_delete=models.DO_NOTHING, db_column='Empresa', blank=True, null=True) # Field name made lowercase.
+    estado = models.CharField(db_column='Estado', max_length=1)  # Field name made lowercase.
+    fecha_ingreso = models.DateTimeField(db_column='Fecha Ingreso', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    fecha_egreso = models.CharField(db_column='Fecha Egreso', max_length=10, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    dependencia = models.CharField(db_column='Dependencia', max_length=3)  # Field name made lowercase.
+    cargo = models.CharField(db_column='Cargo', max_length=3, blank=True, null=True)  # Field name made lowercase.
+    cargo_reemplazo = models.CharField(db_column='Cargo Reemplazo', max_length=3, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    cargo_retroactivo = models.CharField(db_column='Cargo Retroactivo', max_length=3, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    cantidad_horas = models.DecimalField(db_column='Cantidad Horas', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    antiguedad = models.DecimalField(db_column='Antiguedad', max_digits=18, decimal_places=0)  # Field name made lowercase.
+    antiguedad_decreto = models.DecimalField(db_column='Antiguedad Decreto', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    seguro_obligatorio = models.CharField(db_column='Seguro Obligatorio', max_length=1, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    seguro_familiar = models.CharField(db_column='Seguro Familiar', max_length=1, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    seguro_colectivo = models.CharField(db_column='Seguro Colectivo', max_length=1, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    maternidad_fecha_salida = models.CharField(db_column='Maternidad Fecha Salida', max_length=10, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    maternidad_total_dias = models.DecimalField(db_column='Maternidad Total Dias', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    licencia = models.CharField(db_column='Licencia', max_length=1, blank=True, null=True)  # Field name made lowercase.
+    sindicato_ate = models.CharField(db_column='Sindicato ATE', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    sindicato_atsa = models.CharField(db_column='Sindicato ATSA', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    sindicato_upcn = models.CharField(db_column='Sindicato UPCN', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    dependencia_fisica = models.CharField(db_column='Dependencia Fisica', max_length=3, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    aporte_jubilatorio = models.DecimalField(db_column='Aporte Jubilatorio', max_digits=18, decimal_places=4)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    sindicato_sat = models.CharField(db_column='Sindicato SAT', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    obra_social = models.CharField(db_column='Obra Social', max_length=2)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    obra_social_fam_cargo = models.DecimalField(db_column='Obra Social Fam Cargo', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    vacaciones_dias = models.DecimalField(db_column='Vacaciones Dias', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    caja_complementaria = models.DecimalField(db_column='Caja Complementaria', max_digits=18, decimal_places=0)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    situacion_revista = models.CharField(db_column='Situacion Revista', max_length=1, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    fecha_liquidacion = models.CharField(db_column='Fecha Liquidacion', max_length=10, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    tarea = models.CharField(db_column='Tarea', max_length=1, blank=True, null=True)  # Field name made lowercase.
+    legajo_historico = models.CharField(db_column='Legajo Historico', max_length=30, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    motivo_baja = models.CharField(db_column='Motivo Baja', max_length=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    derecho_ocupacion = models.DecimalField(db_column='Derecho Ocupacion', max_digits=18, decimal_places=2, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    art = models.IntegerField(db_column='ART', blank=True, null=True)  # Field name made lowercase.
+    idmaestro = models.IntegerField(db_column='IDMaestro')  # Field name made lowercase.
+    origen = models.CharField(max_length=10, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'Maestro'
+        #unique_together = (('documento', 'legajo', 'fecha_proceso', 'empresa'),)
+
+
 
 class RptCtrolcertgiradas(models.Model):
     idd = models.AutoField(db_column='Idd', primary_key=True)
@@ -562,7 +588,7 @@ class RptCtrolcertgiradas(models.Model):
 
 class Tmpcpt(models.Model):
     idd = models.AutoField(db_column='Idd', primary_key=True)
-    empresa = models.CharField(db_column='Empresa', max_length=6)  # Field name made lowercase.
+    empresa = models.ForeignKey('Empresas', on_delete=models.DO_NOTHING, db_column='Empresa', blank=True, null=True)  # Field name made lowercase.
     concepto = models.IntegerField(db_column='Concepto')  # Field name made lowercase.
     descripcion = models.CharField(db_column='Descripcion', max_length=60)  # Field name made lowercase.
     descripcion_completa = models.CharField(db_column='Descripcion Completa', max_length=200, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -645,7 +671,7 @@ class Valorizaciones(models.Model):
     idd_val = models.AutoField(db_column='IDD_Val', primary_key=True)  # Field name made lowercase.
     documento = models.DecimalField(db_column='Documento', max_digits=18, decimal_places=0)  # Field name made lowercase.
     legajo = models.DecimalField(db_column='Legajo', max_digits=18, decimal_places=0, blank=True, null=True)  # Field name made lowercase.
-    empresa = models.CharField(db_column='Empresa', max_length=6)  # Field name made lowercase.
+    empresa = models.ForeignKey('Empresas', on_delete=models.DO_NOTHING, db_column='Empresa', blank=True, null=True)
     nro_notarh = models.CharField(db_column='Nro NotaRH', max_length=15, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fecha_entrada_rh = models.DateTimeField(db_column='Fecha Entrada RH', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     nro_notadgh = models.CharField(db_column='Nro NotaDGH', max_length=15, blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
@@ -672,7 +698,7 @@ class Categorias(models.Model):
     decreto = models.CharField(db_column='Decreto', max_length=30)  # Field name made lowercase.
     fecha_vig = models.DateTimeField(db_column='Fecha Vig')  # Field name made lowercase. Field renamed to remove unsuitable characters.
     categoria = models.CharField(db_column='Categoria', max_length=3)  # Field name made lowercase.
-    empresa = models.CharField(db_column='Empresa', max_length=6)  # Field name made lowercase.
+    empresa = models.ForeignKey('Empresas', on_delete=models.DO_NOTHING, db_column='Empresa', blank=True, null=True)
     descripcion = models.CharField(db_column='Descripcion', max_length=50, blank=True, null=True)  # Field name made lowercase.
     observaciones = models.CharField(db_column='Observaciones', max_length=200, blank=True, null=True)  # Field name made lowercase.
     secuencia = models.DecimalField(db_column='Secuencia', max_digits=18, decimal_places=2)  # Field name made lowercase.

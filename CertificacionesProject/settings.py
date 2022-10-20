@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_seed',
     'bootstrap5',
     
+    
 ]
 
 MIDDLEWARE = [
@@ -87,8 +88,8 @@ DATABASES = {
     "sqlserver": {
         "ENGINE": "mssql",
         "NAME": "personas",
-        "USER": "tercop",
-        "PASSWORD": "Tercop1123",
+        "USER": "django",
+        "PASSWORD": "django1234",
         "HOST": "10.1.9.102",
         "PORT": "1433",
         "OPTIONS": {"driver": "ODBC Driver 17 for SQL Server", 
